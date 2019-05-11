@@ -14,8 +14,12 @@ List of recent works on bringing deep learning to microcontrollers and deeply em
 
 ## Sort by group
 
-## MISCELLANEOUS
-The major challenge of enabling DL in MCU based systems is the gap between computational capability and energy budget. Since here I focus on deeply embedded systems, the power envelop is usually no more than 100 mW (for some battery powered IoT end-nodes the power enevlop is even tighter). How to make DL work with such limitation requires co-design of application, alogirithm and hardware. Here are some of my thoughts, following the top-down approach. 
+
+# MISCELLANEOUS
+## Features of MCU-based DL systems
+The design target of DL accelerators for server or mobile applications is high throughput and versatility in order to meet the goal of real-time processing of various NN models. Design constraints such as power consumption can be realitively loosen. And for the purpose of compatibility, the hardware should support a wide range of ops dictated by new NN models. 
+
+But for embedded systems, the power constraint is as important as computational capability. The major challenge of enabling DL in MCU based systems is the gap between computational capability and energy budget. Since here I focus on deeply embedded systems, the power envelop is usually no more than 100 mW (for some battery powered IoT end-nodes the power enevlop is even tighter). And we need to co-design the algorithm and hardware rather than adpating hardware to alogrithm, in order to fill the efficiency gap. And for some batteried powered applications there is even no throughpu requirement. 
 
 The application scenario of MCU-based DL can be roughly classified into two types. 
 ### 1. DL Normally-OFF applications
@@ -33,9 +37,26 @@ Below are some examples of normally-off applications:
 - Wearable ECG/EEG monitoring system (periodically)
 
 ### DL Always-ON applications
-Always-ON applications means that the DL task is continous. 
-
+In always-on applications the DL task is processed continuously. 
 Below are some examples of always-on applications:
+- micro powered uav or robots
+
+## How to deploy DL on ULP systems
+There is no consensus on how to deploy DL on MCU based systems, but a common view is using heterogeneous architecture to fill the efficiency gap. The heterogeneous system includes a Cortex-M (or equivalnet) MCU (or clusters), memory system and HW accelerators. For small NN models (which is common in aplications that takes a 1-dim signal as input, such as ECG/KEYWORD/VIBRATION), deployment is easy since on-chip SRAMs (200-500KB) are usually capable to hold all models and intermediate results. But for large models (such as embedded vision applications) 
+
+MCU市场碎片化严重，同一系列的MCU可根据不同应用需求衍生出不同型号。如何用同一种可扩展的架构支持从小到大的应用？
+
+Consensus: Using heterogeneous architecture (Cortex-M or RISC-V + HW Accelerator).
+Challenge:
+1. How to support intelligent applications with different memory footprint and different ops.
+- Scalable HW accelerator. (small to large)
+- ULP memory system. (How to harmonize FLASH, TCDM, EXT-SRAM). 
+
+Or:
+Challenge: how to deploy intelligent applications with different memory footprint, different ops on MCU based systems with limited power envelop?
+1. Use heterogeneous architecture to fill the efficiency gap. 
+2. Scalable HW accelerator with unified interface and toolchain. 
+3. ULP memory system. (How to harmonize FLASH, ext-SRAM, TCDM and SCM, considering both power and BW requirements).  
 
 
 ### 
